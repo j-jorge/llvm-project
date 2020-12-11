@@ -877,6 +877,11 @@ private:
 template <typename KeyT, typename ValueT, unsigned InlineBuckets = 4,
           typename KeyInfoT = DenseMapInfo<KeyT>,
           typename BucketT = llvm::detail::DenseMapPair<KeyT, ValueT>>
+
+#if NO_SMALL_DENSE_MAP
+#define InlineBuckets 1
+#endif
+
 class SmallDenseMap
     : public DenseMapBase<
           SmallDenseMap<KeyT, ValueT, InlineBuckets, KeyInfoT, BucketT>, KeyT,
@@ -885,7 +890,9 @@ class SmallDenseMap
 
   // Lift some types from the dependent base class into this class for
   // simplicity of referring to them.
-  using BaseT = DenseMapBase<SmallDenseMap, KeyT, ValueT, KeyInfoT, BucketT>;
+  using BaseT =
+    DenseMapBase<SmallDenseMap<KeyT, ValueT, InlineBuckets, KeyInfoT, BucketT>,
+                 KeyT, ValueT, KeyInfoT, BucketT>;
 
   static_assert(isPowerOf2_64(InlineBuckets),
                 "InlineBuckets must be a power of 2.");
@@ -1183,6 +1190,7 @@ private:
     return Rep;
   }
 };
+#undef InlineBuckets
 
 template <typename KeyT, typename ValueT, typename KeyInfoT, typename Bucket,
           bool IsConst>

@@ -34,9 +34,11 @@ static_assert(sizeof(SmallVector<Struct16B, 0>) >= alignof(Struct16B),
               "missing padding for 16-byte aligned T");
 static_assert(sizeof(SmallVector<Struct32B, 0>) >= alignof(Struct32B),
               "missing padding for 32-byte aligned T");
+#if !NO_SMALL_VECTOR
 static_assert(sizeof(SmallVector<void *, 1>) ==
                   sizeof(unsigned) * 2 + sizeof(void *) * 2,
               "wasted space in SmallVector size 1");
+#endif
 
 static_assert(sizeof(SmallVector<char, 0>) ==
                   sizeof(void *) * 2 + sizeof(void *),

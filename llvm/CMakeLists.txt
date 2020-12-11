@@ -543,6 +543,20 @@ if(LLVM_BUILD_EXAMPLES)
   add_definitions(-DBUILD_EXAMPLES)
 endif(LLVM_BUILD_EXAMPLES)
 
+option(LLVM_NO_SMALL_VECTOR
+  "Consider all small vectors to have no in-place buffer." OFF)
+
+if(LLVM_NO_SMALL_VECTOR)
+  add_definitions(-DNO_SMALL_VECTOR=1)
+endif()
+
+option(LLVM_NO_SMALL_DENSE_MAP
+  "Consider all small dense maps to have a single inline bucket." OFF)
+
+if(LLVM_NO_SMALL_DENSE_MAP)
+  add_definitions(-DNO_SMALL_DENSE_MAP=1)
+endif()
+
 option(LLVM_BUILD_TESTS
   "Build LLVM unit tests. If OFF, just generate build targets." OFF)
 option(LLVM_INCLUDE_TESTS "Generate build targets for the LLVM unit tests." ON)
